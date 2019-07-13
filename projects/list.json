@@ -1,0 +1,27 @@
+[
+    {
+        "name": "cli",
+        "label": "Command Line",
+        "description": "Command Line application with arguments parsing",
+        "files": [
+            "index.js",
+            "projectname.js",
+            "test.js",
+            "foo/1.json"
+        ]
+    },
+    {
+        "name": "gui",
+        "label": "GUI",
+        "description": "GUI application with a Web-frontend and WebSocket transport",
+        "files": [
+        ]
+    },
+    {
+        "name": "service",
+        "label": "Service",
+        "description": "Server-side application with HTTP services",
+        "files": [
+        ]
+    }
+]
