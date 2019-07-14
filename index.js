@@ -102,12 +102,16 @@ define([
             });
             var text = mustache.render(template, {
                 license: license,
-                projectname: projectname
+                projectname: projectname,
+                mustache_open_brackets: "{{{",
+                mustache_close_brackets: "}}}"
             });
-            var fdir = -1 !== fi.indexOf("/") ? fi.replace(/\/.*?$/, "") : "";
+            var fdir = -1 !== fi.indexOf("/") ? fi.replace(/\/[^\/]*$/, "") : "";
             var fname = fi.replace(/^.*\//, "");
-            var name = "projectname.js" === fname ? (projectname + ".js") : fname;
-            var path = projectname + "/" + fdir + "/" + name;
+            var fext = fname.replace(/^.*\./, ".");
+            var name = "projectname" + fext === fname ? (projectname + fext) : fname;
+            var fdirSlash = fdir.length > 0 ? fdir + "/" : "";
+            var path = projectname + "/" + fdirSlash + name;
             if (fdir.length > 0) {
                 var dirs = fdir.split("/");
                 var prefix = projectname;
@@ -126,8 +130,10 @@ define([
 
     return {
         main: function(projectname) {
-            if (!(isString(projectname) && projectname.length > 0)) {
+            if (!(isString(projectname) && projectname.length > 0 &&
+                        /^[a-zA-Z0-9_]+$/.test(projectname))) {
                 print("Error: invalid project name specified: [" + projectname + "]");
+                print("Usage: wilton -n -- myproject");
                 return 1;
             }
 

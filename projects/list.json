@@ -6,8 +6,7 @@
         "files": [
             "index.js",
             "projectname.js",
-            "test.js",
-            "foo/1.json"
+            "test.js"
         ]
     },
     {
@@ -20,8 +19,25 @@
     {
         "name": "service",
         "label": "Service",
-        "description": "Server-side application with HTTP services",
+        "description": "Server-side application with SQLite database and HTTP services",
         "files": [
+            "conf/config.json",
+            "server/init/initDatabase.js",
+            "server/init/startServer.js",
+            "server/models/schema.js",
+            "server/models/schema.sql",
+            "server/models/user.js",
+            "server/models/user.sql",
+            "server/views/ping.js",
+            "server/views/users.js",
+            "server/conf.js",
+            "server/db.js",
+            "test/init/startServerTest.js",
+            "test/models/userTest.js",
+            "test/views/pingTest.js",
+            "test/views/usersTest.js",
+            "index.js",
+            "test.js"
         ]
     }
 ]
