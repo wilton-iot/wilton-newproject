@@ -22,6 +22,7 @@
         "description": "Server-side application with SQLite database and HTTP services",
         "files": [
             "conf/config.json",
+            "server/init/createDirs.js",
             "server/init/initDatabase.js",
             "server/init/startServer.js",
             "server/models/schema.js",

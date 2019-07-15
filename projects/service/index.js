@@ -13,9 +13,14 @@ define([
     "wilton/misc",
     "wilton/utils",
     // init
+    "{{projectname}}/server/init/createDirs",
     "{{projectname}}/server/init/initDatabase",
     "{{projectname}}/server/init/startServer"
-], function(module, Channel, fs, Logger, loader, misc, utils, initDatabase, startServer) {
+], function(
+        module, // libs
+        Channel, fs, Logger, loader, misc, utils, // wilton
+        createDirs, initDatabase, startServer // init
+) {
     "use strict";
     var logger = new Logger(module.id);
     utils.checkRootModuleName(module, "{{projectname}}");
@@ -26,8 +31,7 @@ define([
             var conf = loader.loadAppConfig(module);
 
             // create neccessary dirs
-            fs.mkdirIfNotExists(conf.appdir + "log");
-            fs.mkdirIfNotExists(conf.appdir + "work");
+            createDirs();
 
             // init logging
             Logger.initialize(conf.logging);
