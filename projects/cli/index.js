@@ -37,6 +37,12 @@ define([
                 defaultValue: false,
                 help: "Prints this message"
             });
+            ap.addArgument([], {
+                action: "store",
+                dest: "other",
+                defaultValue: [],
+                nargs: argparse.Const.REMAINDER
+            });
 
             // parse arguments
             var args = null;

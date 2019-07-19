@@ -45,5 +45,11 @@
             "wilton": "INFO",
             "{{projectname}}": "DEBUG"
         }
+    },
+
+    "launcher": {
+        "tcpPort": 8080,
+        "rootModuleName": "{{projectname}}",
+        "startupModule": "{{projectname}}/index"
     }
 }
