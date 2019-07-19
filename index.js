@@ -22,7 +22,6 @@ define([
     "lodash/find",
     "lodash/forEach",
     "lodash/isString",
-    "lodash/map",
     // wilton
     "wilton/fs",
     "wilton/misc",
@@ -34,7 +33,7 @@ define([
 ], function(
         module, // module
         moment, // libs
-        find, forEach, isString, map, // lodash
+        find, forEach, isString, // lodash
         fs, misc, mustache, utils, // wilton
         licenses, projects
 ) {
