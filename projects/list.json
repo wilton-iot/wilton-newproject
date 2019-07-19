@@ -10,13 +10,6 @@
         ]
     },
     {
-        "name": "gui",
-        "label": "GUI",
-        "description": "GUI application with a Web-frontend and WebSocket transport",
-        "files": [
-        ]
-    },
-    {
         "name": "service",
         "label": "Service",
         "description": "Server-side application with SQLite database and HTTP services",
@@ -39,6 +32,53 @@
             "test/views/usersTest.js",
             "index.js",
             "test.js"
+        ]
+    },
+    {
+        "name": "webview",
+        "label": "WebView",
+        "description": "WebView desktop/Android application with a WebSocket transport between a Web frontend and a local backend",
+        "files": [
+            "conf/config.json",
+            "server/calls/users.js",
+            "server/init/createDirs.js",
+            "server/init/initDatabase.js",
+            "server/init/startServer.js",
+            "server/models/schema.js",
+            "server/models/schema.sql",
+            "server/models/user.js",
+            "server/models/user.sql",
+            "server/views/config.js",
+            "server/views/ping.js",
+            "server/views/websocket.js",
+            "server/conf.js",
+            "server/db.js",
+            "test/calls/usersTest.js",
+            "test/init/startServerTest.js",
+            "test/models/userTest.js",
+            "web/css/projectname.css",
+            "web/img/logo_256.svg",
+            "web/js/projectname/common/mutations/updateCanGoBack.js",
+            "web/js/projectname/common/mutations/updateCanGoForward.js",
+            "web/js/projectname/components/header/Header.html",
+            "web/js/projectname/components/header/Header.js",
+            "web/js/projectname/modules/landing/landing.html",
+            "web/js/projectname/modules/landing/landing.js",
+            "web/js/projectname/modules/userList/actions/loadUsers.js",
+            "web/js/projectname/modules/userList/mutations/setError.js",
+            "web/js/projectname/modules/userList/mutations/updateUsers.js",
+            "web/js/projectname/modules/userList/userList.html",
+            "web/js/projectname/modules/userList/userList.js",
+            "web/js/projectname/modules/userList/userListStore.js",
+            "web/js/projectname/app.html",
+            "web/js/projectname/app.js",
+            "web/js/projectname/router.js",
+            "web/js/projectname/store.js",
+            "web/js/index.js",
+            "web/index.html",
+            "index.js",
+            "test.js",
+            "webview.js"
         ]
     }
 ]

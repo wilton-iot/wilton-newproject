@@ -40,11 +40,9 @@ define([
                 // models
                 "{{projectname}}/test/models/userTest",
 
-                // views
-                "{{projectname}}/test/views/pingTest",
-                "{{projectname}}/test/views/usersTest"
-            ], function(server) {
-                server.stop();
+                // calls
+                "{{projectname}}/test/calls/usersTest"
+            ], function() {
             });
             
             logger.info("TESTS PASSED");
@@ -52,4 +50,3 @@ define([
     };
 
 });
-

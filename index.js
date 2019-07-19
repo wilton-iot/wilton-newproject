@@ -104,9 +104,12 @@ define([
                 license: license,
                 projectname: projectname,
                 mustache_open_brackets: "{{{",
-                mustache_close_brackets: "}}}"
+                mustache_close_brackets: "}}}",
+                vue_open_brackets: "{{",
+                vue_close_brackets: "}}"
             });
-            var fdir = -1 !== fi.indexOf("/") ? fi.replace(/\/[^\/]*$/, "") : "";
+            var pfi = fi.replace(/\/projectname\//, "/" + projectname + "/");
+            var fdir = -1 !== pfi.indexOf("/") ? pfi.replace(/\/[^\/]*$/, "") : "";
             var fname = fi.replace(/^.*\//, "");
             var fext = fname.replace(/^.*\./, ".");
             var name = "projectname" + fext === fname ? (projectname + fext) : fname;

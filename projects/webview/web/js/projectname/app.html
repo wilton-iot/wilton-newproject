@@ -1,0 +1,14 @@
+<!--
+{{license}}
+-->
+
+<div class="container-fluid">
+
+    <transition 
+        name="{{projectname}}-fade"
+        v-on:after-enter="top"
+        v-on:after-leave="top">
+        <router-view></router-view>
+    </transition>
+
+</div>

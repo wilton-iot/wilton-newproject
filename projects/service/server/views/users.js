@@ -8,10 +8,10 @@ define([
     "lodash/isEmpty",
     "lodash/isString",
     "wilton/Logger",
-    "{{projectname}}/server/models/user",
     "../conf",
-    "../db"
-], function(module, isBoolean, isEmpty, isString, Logger, user, conf, db) {
+    "../db",
+    "../models/user"
+], function(module, isBoolean, isEmpty, isString, Logger, conf, db, user) {
     "use strict";
     var logger = new Logger(module.id);
 

@@ -1,0 +1,24 @@
+/*
+{{license}}
+ */
+
+/* custom css goes here */
+
+/* splash-screen utility */
+.{{projectname}}-absolute {
+    position: absolute;
+}
+
+/* fade animation */
+.{{projectname}}-fade-enter-active, .{{projectname}}-fade-leave-active {
+    transition-property: opacity;
+    transition-duration: .20s;
+}
+
+.{{projectname}}-fade-enter-active {
+    transition-delay: .20s;
+}
+
+.{{projectname}}-fade-enter, .{{projectname}}-fade-leave-active {
+    opacity: 0
+}

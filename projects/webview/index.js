@@ -10,6 +10,7 @@ define([
     "wilton/Logger",
     "wilton/loader",
     "wilton/misc",
+    "wilton/process",
     "wilton/utils",
     // init
     "{{projectname}}/server/init/createDirs",
@@ -17,7 +18,7 @@ define([
     "{{projectname}}/server/init/startServer"
 ], function(
         module, // libs
-        Channel, Logger, loader, misc, utils, // wilton
+        Channel, Logger, loader, misc, process, utils, // wilton
         createDirs, initDatabase, startServer // init
 ) {
     "use strict";
@@ -28,7 +29,6 @@ define([
         main: function() {
             // load config file
             var conf = loader.loadAppConfig(module);
-
             // share conf for other threads
             new Channel("{{projectname}}/server/conf", 1).send(conf);
 
@@ -44,7 +44,24 @@ define([
             // server
             var server = startServer();
 
-            misc.waitForSignal();
+            // share server instance to other threads
+            // to be able to broadcast WebSocket messages
+            new Channel("{{projectname}}/server/instance", 1).send({
+                handle: server.handle
+            });
+
+            if ((misc.isLinux() || misc.isWindows()) && conf.webview.enabled) {
+                logger.info("Initializing WebView ...");
+                process.spawn({
+                    executable: misc.wiltonConfig().wiltonExecutable,
+                    args: [conf.appdir + "webview.js", "-j", "duktape"],
+                    outputFile: conf.appdir + "work/client_out.txt",
+                    awaitExit: true
+                });
+            } else {
+                logger.info("Awaiting shutdown signal ...");
+                misc.waitForSignal();
+            }
             logger.info("Shutting down ...");
             server.stop();
         }

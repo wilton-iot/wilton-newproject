@@ -1,0 +1,66 @@
+<!--
+{{license}}
+-->
+
+<div class="row">
+    <div class="col">
+
+        <{{projectname}}-header></{{projectname}}-header>
+
+        <div
+            role="alert"
+            v-bind:class="infoCss"
+            v-html="infoText">
+        </div>
+
+        <div class="table-responsive">
+            <table
+                v-bind:class="tableCss"
+                v-if="users.length > 0">
+                <thead>
+                    <tr>
+                        <th>
+                            ID
+                        </th>
+                        <th>
+                            Date
+                        </th>
+                        <th>
+                            Nick
+                        </th>
+                        <th>
+                            Email
+                        </th>
+                        <th>
+                            Allow spam
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="user in users">
+                        <td>{{vue_open_brackets}}user.id{{vue_close_brackets}}</td>
+                        <td>{{vue_open_brackets}}user.dateAdded{{vue_close_brackets}}</td>
+                        <td>{{vue_open_brackets}}user.nick{{vue_close_brackets}}</td>
+                        <td>{{vue_open_brackets}}user.email{{vue_close_brackets}}</td>
+                        <td>{{vue_open_brackets}}user.spam{{vue_close_brackets}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="row">
+            <hr/>
+        </div>
+
+        <div class="row">
+            <div class="col text-center">
+                <button
+                    type="button"
+                    class="btn btn-lg btn-success btn-block"
+                    v-on:click.stop.prevent="toLanding()">
+                    Return
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,49 @@
+{
+    "appname": "{{projectname}}",
+    "appdir": "{{mustache_open_brackets}}appdir{{mustache_close_brackets}}",
+
+    "server": {
+        "ipAddress": "127.0.0.1",
+        "tcpPort": 8080,
+        "cacheMaxAgeSeconds": 0,
+        "stdlibFileName": "std.wlib"
+    },
+
+    "database": {
+        "reCreateOnStartup": true,
+        "url": "sqlite://{{mustache_open_brackets}}appdir{{mustache_close_brackets}}/work/{{projectname}}.db"
+    },
+
+    "webview": {
+        "enabled": true,
+        "kiosk": {
+            "url": "http://127.0.0.1:8080",
+            "fullscreen": false,
+            "windowWidth": 800,
+            "windowHeight": 600
+        }
+    },
+
+    "web": {
+        "wsUrl": "ws://127.0.0.1:8080/{{projectname}}/server/views/websocket"
+    },
+
+    "logging": {
+        "appenders": [
+            {
+                "appenderType": "DAILY_ROLLING_FILE",
+                "thresholdLevel": "DEBUG",
+                "filePath": "{{mustache_open_brackets}}appdir{{mustache_close_brackets}}/log/{{projectname}}_log.txt"
+            },
+            {
+                "appenderType": "CONSOLE",
+                "thresholdLevel": "INFO"
+            }
+        ],
+        "loggers": {
+            "staticlib": "WARN",
+            "wilton": "INFO",
+            "{{projectname}}": "DEBUG"
+        }
+    }
+}
