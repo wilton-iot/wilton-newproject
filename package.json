@@ -1,6 +1,7 @@
 {
   "wilton": {
     "excludes": [
-    ]
+    ],
+    "minify": false
   }
 }
