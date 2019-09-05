@@ -24,8 +24,9 @@ define([
             appdir: conf.appdir
         });
         fs.writeFile(path, text);
-        print("Desktop file written, path [" + path + "]," +
-                " copy it to '~/Desktop/' directory to install");
+        print("Desktop file written, path [" + path + "]");
+        print("Copy it to '~/Desktop/' to install desktop shortcut");
+        print("Copy it to '~/.config/autostart/' to enable autostart on login");
     };
 
 });

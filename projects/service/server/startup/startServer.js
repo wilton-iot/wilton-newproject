@@ -11,8 +11,7 @@ define([
     "use strict";
     var logger = new Logger(module.id);
 
-    return function() {
-        var conf = Channel.lookup("{{projectname}}/server/conf").peek();
+    return function(conf) {
         logger.info("Starting server on port: [" + conf.server.tcpPort + "]");
         var server = new Server({
             ipAddress: conf.server.ipAddress,
@@ -22,6 +21,12 @@ define([
                 "{{projectname}}/server/views/users"
             ],
             rootRedirectLocation: "/{{projectname}}/server/views/ping"
+        });
+
+        // share server instance to other threads
+        // to be able to broadcast WebSocket messages
+        new Channel("{{projectname}}/server/instance", 1).send({
+            handle: server.handle
         });
 
         return server;

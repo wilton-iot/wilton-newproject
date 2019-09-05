@@ -31,8 +31,8 @@ define([
         var ap = new argparse.ArgumentParser({
             addHelp: false,
             nargs: argparse.Const.REMAINDER,
-            prog: "test1",
-            description: "test1 application",
+            prog: "{{projectname}}",
+            description: "{{projectname}} application",
             usage: "wilton index.js -- [options]"
         });
 

@@ -1,5 +1,5 @@
 [Desktop Entry]
-Name={{projectname}} WebView
+Name={{projectname}}
 Exec=/opt/wilton/bin/wilton {{mustache_open_brackets}}appdir{{mustache_close_brackets}}index.js -j duktape -- --launch-webview
 Icon=/opt/wilton/conf/logo.png
 Type=Application

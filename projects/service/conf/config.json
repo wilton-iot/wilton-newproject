@@ -26,8 +26,12 @@
         ],
         "loggers": {
             "staticlib": "WARN",
-            "wilton": "INFO",
+            "wilton": "WARN",
             "{{projectname}}": "DEBUG"
         }
+    },
+
+    "systemd": {
+        "notifyExecPath": "/usr/bin/systemd-notify"
     }
 }

@@ -7,8 +7,8 @@ define([
     "wilton/Channel",
     "wilton/Logger",
     "wilton/loader",
-    "{{projectname}}/server/init/createDirs",
-    "{{projectname}}/server/init/initDatabase"
+    "{{projectname}}/server/startup/createDirs",
+    "{{projectname}}/server/startup/initDatabase"
 ], function(module, Channel, Logger, loader, createDirs, initDatabase) {
     "use strict";
     var logger = new Logger(module.id);
@@ -30,12 +30,12 @@ define([
         main: function() {
             var conf = loader.loadAppConfig(module);
             new Channel("{{projectname}}/server/conf", 1).send(conf);
-            createDirs();
-            initDatabase();
+            createDirs(conf);
+            initDatabase(conf);
 
             require([
                 // server
-                "{{projectname}}/test/init/startServerTest",
+                "{{projectname}}/test/startup/startServerTest",
 
                 // models
                 "{{projectname}}/test/models/userTest",
