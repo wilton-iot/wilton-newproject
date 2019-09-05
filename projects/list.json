@@ -41,9 +41,15 @@
         "files": [
             "conf/config.json",
             "server/calls/users.js",
-            "server/init/createDirs.js",
-            "server/init/initDatabase.js",
-            "server/init/startServer.js",
+            "server/startup/createDirs.js",
+            "server/startup/createGnomeDesktopFile.js",
+            "server/startup/gnome.desktop",
+            "server/startup/initDatabase.js",
+            "server/startup/launchDefault.js",
+            "server/startup/launchWebView.js",
+            "server/startup/startServer.js",
+            "server/startup/systemd.js",
+            "server/startup/systemd.service",
             "server/models/schema.js",
             "server/models/schema.sql",
             "server/models/user.js",
@@ -54,8 +60,8 @@
             "server/conf.js",
             "server/db.js",
             "test/calls/usersTest.js",
-            "test/init/startServerTest.js",
             "test/models/userTest.js",
+            "test/startup/startServerTest.js",
             "web/css/projectname.css",
             "web/img/logo_256.svg",
             "web/js/projectname/common/mutations/updateCanGoBack.js",
@@ -77,8 +83,7 @@
             "web/js/index.js",
             "web/index.html",
             "index.js",
-            "test.js",
-            "webview.js"
+            "test.js"
         ]
     }
 ]

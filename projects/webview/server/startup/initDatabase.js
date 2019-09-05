@@ -10,22 +10,24 @@ define([
     "use strict";
     var logger = new Logger(module.id);
 
-    return function() {
+    return function(conf) {
         var dbres = null;
+        // db modules depend on conf channel
         require([
-            "{{projectname}}/server/conf",
             "{{projectname}}/server/db",
             "{{projectname}}/server/models/schema",
             "{{projectname}}/server/models/user"
-        ], function(conf, db, schema, user) {
+        ], function(db, schema, user) {
             // prepare lock for sqlite access
             new Channel(conf.database.url, 1);
 
-            schema.create();
+            if (conf.database.reCreateOnStartup) {
+                schema.create();
 
-            db.doInSyncTransaction(conf.database.url, function() {
-                user.insertDummyRecords();
-            });
+                db.doInSyncTransaction(conf.database.url, function() {
+                    user.insertDummyRecords();
+                });
+            }
 
             dbres = db;
         });

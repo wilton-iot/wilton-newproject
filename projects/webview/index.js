@@ -5,65 +5,121 @@
 define([
     // libs
     "module",
+    "argparse",
     // wilton
     "wilton/Channel",
-    "wilton/Logger",
     "wilton/loader",
-    "wilton/misc",
-    "wilton/process",
+    "wilton/Logger",
     "wilton/utils",
-    // init
-    "{{projectname}}/server/init/createDirs",
-    "{{projectname}}/server/init/initDatabase",
-    "{{projectname}}/server/init/startServer"
+    // startup
+    "{{projectname}}/server/startup/createDirs",
+    "{{projectname}}/server/startup/createGnomeDesktopFile",
+    "{{projectname}}/server/startup/launchDefault",
+    "{{projectname}}/server/startup/launchWebView",
+    "{{projectname}}/server/startup/systemd"
 ], function(
-        module, // libs
-        Channel, Logger, loader, misc, process, utils, // wilton
-        createDirs, initDatabase, startServer // init
+        module, argparse, // libs
+        Channel, loader, Logger, utils, // wilton
+        createDirs, createGnomeDesktopFile, launchDefault, launchWebView, systemd // startup
 ) {
     "use strict";
     var logger = new Logger(module.id);
     utils.checkRootModuleName(module, "{{projectname}}");
 
+    function createArgParser() {
+        // parser
+        var ap = new argparse.ArgumentParser({
+            addHelp: false,
+            nargs: argparse.Const.REMAINDER,
+            prog: "test1",
+            description: "test1 application",
+            usage: "wilton index.js -- [options]"
+        });
+
+        // https://github.com/wilton-iot/argparse#addargument-method
+
+        // systemd
+        ap.addArgument(["--create-systemd-unit-file"], {
+            action: "storeTrue",
+            dest: "createSystemdServiceFile",
+            defaultValue: false,
+            help: "Creates a systemd unit file '{{projectname}}.service'" +
+                    " that allows to run this application as a systemd service"
+        });
+        ap.addArgument(["--launch-systemd-service"], {
+            action: "storeTrue",
+            dest: "launchSystemdService",
+            defaultValue: false,
+            help: "Launch this application as a systemd service (entry point for systemd)"
+        });
+
+        // gnome desktop
+        ap.addArgument(["--create-gnome-desktop-file"], {
+            action: "storeTrue",
+            dest: "createGnomeDesktopFile",
+            defaultValue: false,
+            help: "Creates a Gnome desktop file '{{projectname}}.desktop'" +
+                    " that allows to run the WebView for this application"
+        });
+        ap.addArgument(["--launch-webview"], {
+            action: "storeTrue",
+            dest: "launchWebView",
+            defaultValue: false,
+            help: "Launch WebView UI for this application"
+        });
+
+        // todo: winscm
+
+        // other
+        ap.addArgument(["-h", "--help"], {
+            action: "storeTrue",
+            dest: "help",
+            defaultValue: false,
+            help: "Prints this message"
+        });
+
+        return ap;
+    }
+
     return {
         main: function() {
-            // load config file
-            var conf = loader.loadAppConfig(module);
-            // share conf for other threads
-            new Channel("{{projectname}}/server/conf", 1).send(conf);
+            // create arg parser
+            var ap = createArgParser();
 
-            // create neccessary dirs
-            createDirs();
-
-            // init logging
-            Logger.initialize(conf.logging);
-
-            // db
-            initDatabase().close();
-
-            // server
-            var server = startServer();
-
-            // share server instance to other threads
-            // to be able to broadcast WebSocket messages
-            new Channel("{{projectname}}/server/instance", 1).send({
-                handle: server.handle
-            });
-
-            if ((misc.isLinux() || misc.isWindows()) && conf.webview.enabled) {
-                logger.info("Initializing WebView ...");
-                process.spawn({
-                    executable: misc.wiltonConfig().wiltonExecutable,
-                    args: [conf.appdir + "webview.js", "-j", "duktape"],
-                    outputFile: conf.appdir + "work/client_out.txt",
-                    awaitExit: true
-                });
-            } else {
-                logger.info("Awaiting shutdown signal ...");
-                misc.waitForSignal();
+            // parse arguments
+            var args = null;
+            try {
+                var arglist = Array.prototype.slice.call(arguments);
+                args = ap.parseArgs(arglist);
+            } catch (e) {
+                // print details and exit on invalid args
+                print(e.message);
+                ap.printUsage();
+                return 2;
             }
-            logger.info("Shutting down ...");
-            server.stop();
+
+            // load configuration file and share it for other threads
+            var conf = loader.loadAppConfig(module);
+            new Channel("{{projectname}}/server/conf", 1).send(conf);
+            // prepare neccessary directories
+            createDirs(conf);
+
+            // run aplication
+            if (args.help) {
+                ap.printHelp();
+                return;
+            } else if (args.createSystemdServiceFile) {
+                return systemd.createServiceFile(conf);
+            } else if (args.launchSystemdService) {
+                return systemd.launch(conf);
+            } else if (args.createGnomeDesktopFile) {
+                return createGnomeDesktopFile(conf);
+            } else if (args.launchWebView) {
+                return launchWebView(conf);
+            } else {
+                return launchDefault(conf);
+            }
+
         }
     };
 

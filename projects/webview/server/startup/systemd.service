@@ -1,0 +1,10 @@
+[Unit]
+Description={{projectname}} service
+
+[Service]
+Type=notify
+ExecStart=/opt/wilton/bin/wilton {{mustache_open_brackets}}appdir{{mustache_close_brackets}}index.js -- --launch-systemd-service
+
+[Install]
+WantedBy=multi-user.target
+

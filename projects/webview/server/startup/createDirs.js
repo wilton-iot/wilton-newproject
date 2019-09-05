@@ -4,10 +4,9 @@
 
 define([
     "module",
-    "wilton/Channel",
     "wilton/fs",
     "wilton/Logger"
-], function(module, Channel, fs, Logger) {
+], function(module, fs, Logger) {
     "use strict";
     var logger = new Logger(module.id);
 
@@ -17,8 +16,7 @@ define([
         }
     }
 
-    return function() {
-        var conf = Channel.lookup("{{projectname}}/server/conf").peek();
+    return function(conf) {
         createIfNotExists(conf.appdir + "log");
         createIfNotExists(conf.appdir + "work");
     };

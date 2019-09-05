@@ -11,7 +11,7 @@ define([
     "wilton/Logger",
     // local
     "{{projectname}}/server/conf",
-    "{{projectname}}/server/init/startServer"
+    "{{projectname}}/server/startup/startServer"
 ], function(
         module, assert, // deps
         http, Logger, // wilton
@@ -24,7 +24,7 @@ define([
     // start
     var server = null;
     try {
-        var server = startServer();
+        var server = startServer(conf);
         assert(server);
         // ping
         var resp = http.sendRequest("http://127.0.0.1:" + conf.server.tcpPort + "/{{projectname}}/server/views/ping");

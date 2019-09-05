@@ -23,7 +23,7 @@ define([
                 prog: "cli",
                 description: "Wilton command line application stub"
             });
-            https://github.com/wilton-iot/argparse#addargument-method
+            // https://github.com/wilton-iot/argparse#addargument-method
             ap.addArgument(["-p", "--print-me"], {
                 action: "store",
                 type: "string",

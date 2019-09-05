@@ -15,7 +15,6 @@
     },
 
     "webview": {
-        "enabled": true,
         "kiosk": {
             "url": "http://127.0.0.1:8080",
             "fullscreen": false,
@@ -42,7 +41,7 @@
         ],
         "loggers": {
             "staticlib": "WARN",
-            "wilton": "INFO",
+            "wilton": "WARN",
             "{{projectname}}": "DEBUG"
         }
     },
@@ -51,5 +50,9 @@
         "tcpPort": 8080,
         "rootModuleName": "{{projectname}}",
         "startupModule": "{{projectname}}/index"
+    },
+
+    "systemd": {
+        "notifyExecPath": "/usr/bin/systemd-notify"
     }
 }
