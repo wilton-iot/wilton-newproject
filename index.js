@@ -135,7 +135,7 @@ define([
             if (!(isString(projectname) && projectname.length > 0 &&
                         /^[a-zA-Z0-9_]+$/.test(projectname))) {
                 print("Error: invalid project name specified: [" + projectname + "]");
-                print("Usage: wilton -n -- myproject");
+                print("Usage: wilton -n myproject");
                 return 1;
             }
 

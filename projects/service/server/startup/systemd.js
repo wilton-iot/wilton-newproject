@@ -9,14 +9,13 @@ define([
     "wilton/Logger",
     "wilton/misc",
     "wilton/mustache",
-    "wilton/process",
     // local
     "./initDatabase",
     "./startServer",
     "text!./systemd.service"
 ], function(
         module,
-        fs, Logger, misc, mustache, process, // wilton
+        fs, Logger, misc, mustache, // wilton
         initDatabase, startServer, sst // local
 ) {
     "use strict";
@@ -25,8 +24,14 @@ define([
     return {
         createServiceFile: function(conf) {
             var path = conf.appdir + "work/{{projectname}}.service";
+            var username = misc.wiltonConfig().environmentVariables.USER;
+            if (!("string" === typeof(username) && username.length > 0)) {
+                print("ERROR: cannot find out user name from '$USER' environment variable");
+                return 1;
+            }
             var text = mustache.render(sst, {
-                appdir: conf.appdir
+                appdir: conf.appdir,
+                username: username
             });
             fs.writeFile(path, text);
             print("Service file written, path [" + path + "]");
@@ -47,17 +52,7 @@ define([
             var server = startServer(conf);
 
             // notify systemd
-            var code = process.spawn({
-                executable: conf.systemd.notifyExecPath,
-                args: ["--ready", "--pid", String(process.currentPid())],
-                outputFile: conf.appdir + "work/sd_notify_out.txt",
-                awaitExit: true
-            });
-            if (0 !== code) {
-                logger.error("Error notifying systemd, code: [" + code + "], shutting down ...");
-                server.stop();
-                return 1;
-            }
+            misc.systemdNotify("READY=1");
 
             // wait for signal from systemd
             misc.waitForSignal();

@@ -29,9 +29,5 @@
             "wilton": "WARN",
             "{{projectname}}": "DEBUG"
         }
-    },
-
-    "systemd": {
-        "notifyExecPath": "/usr/bin/systemd-notify"
     }
 }

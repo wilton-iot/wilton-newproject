@@ -50,9 +50,5 @@
         "tcpPort": 8080,
         "rootModuleName": "{{projectname}}",
         "startupModule": "{{projectname}}/index"
-    },
-
-    "systemd": {
-        "notifyExecPath": "/usr/bin/systemd-notify"
     }
 }
