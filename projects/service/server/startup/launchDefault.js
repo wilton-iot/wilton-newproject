@@ -9,12 +9,13 @@ define([
     "wilton/misc",
     "wilton/process",
     // local
+    "./initAuth",
     "./initDatabase",
     "./startServer"
 ], function(
         module,
         Logger, misc, process, // wilton
-        initDatabase, startServer // local
+        initAuth, initDatabase, startServer // local
 ) {
     "use strict";
     var logger = new Logger(module.id);
@@ -25,6 +26,9 @@ define([
 
         // db
         initDatabase(conf).close();
+
+        // auth
+        initAuth(conf);
 
         // server
         var server = startServer(conf);

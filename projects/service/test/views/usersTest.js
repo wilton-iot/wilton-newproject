@@ -15,12 +15,13 @@ define([
     "wilton/httpClient",
     "wilton/Logger",
     // local
-    "{{projectname}}/server/conf"
+    "{{projectname}}/server/conf",
+    "../_utils/login"
 ], function(
         module, assert, // deps
         isArray, isInteger, isObject, isString, // lodash
         http, Logger, // wilton
-        conf // local
+        conf, login // local
 ) {
     "use strict";
     var logger = new Logger(module.id);
@@ -29,8 +30,17 @@ define([
 
     var url = "http://127.0.0.1:" + conf.server.tcpPort + "/{{projectname}}/server/views/users";
 
+    // auth
+    var headers = {
+        Authorization: login("admin", "password")
+    };
+
     // list
-    var resp1 = http.sendRequest(url + "?nick=");
+    var resp1 = http.sendRequest(url + "?nick=", {
+        meta: {
+            headers: headers
+        }
+    });
     assert.equal(resp1.responseCode, 200);
     assert(isObject(resp1.json()));
     assert(isArray(resp1.json().users));
@@ -42,6 +52,9 @@ define([
             nick: "foo",
             email: "baz@bar.com",
             spam: false
+        },
+        meta: {
+            headers: headers
         }
     });
     assert.equal(resp2.responseCode, 200);
@@ -56,7 +69,8 @@ define([
             email: "baz@bar.com",
             spam: false
         }, meta: {
-            abortOnResponseError: false
+            abortOnResponseError: false,
+            headers: headers
         }
     });
     assert.equal(resp3.responseCode, 400);
@@ -65,7 +79,11 @@ define([
     assert(isString(resp3.json().errors.nick));
 
     // list
-    var resp4 = http.sendRequest(url + "?nick=");
+    var resp4 = http.sendRequest(url + "?nick=", {
+        meta: {
+            headers: headers
+        }
+    });
     assert.equal(resp4.responseCode, 200);
     assert(isObject(resp4.json()));
     assert(isArray(resp4.json().users));

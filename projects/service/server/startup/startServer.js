@@ -17,8 +17,16 @@ define([
             ipAddress: conf.server.ipAddress,
             tcpPort: conf.server.tcpPort,
             views: [
+                // auth
+                "{{projectname}}/server/auth/login",
+                "{{projectname}}/server/auth/logout",
+
+                // app
                 "{{projectname}}/server/views/ping",
                 "{{projectname}}/server/views/users"
+            ],
+            filters: [
+                "{{projectname}}/server/auth/filter"
             ],
             rootRedirectLocation: "/{{projectname}}/server/views/ping"
         });

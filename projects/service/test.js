@@ -8,20 +8,22 @@ define([
     "wilton/Logger",
     "wilton/loader",
     "{{projectname}}/server/startup/createDirs",
+    "{{projectname}}/server/startup/initAuth",
     "{{projectname}}/server/startup/initDatabase"
-], function(module, Channel, Logger, loader, createDirs, initDatabase) {
+], function(module, Channel, Logger, loader, createDirs, initAuth, initDatabase) {
     "use strict";
     var logger = new Logger(module.id);
 
     Logger.initialize({
         appenders: [{
             appenderType: "CONSOLE",
-            thresholdLevel: "INFO"
+            thresholdLevel: "DEBUG"
         }],
         loggers: {
             "staticlib": "WARN",
             "wilton": "WARN",
             "{{projectname}}": "WARN",
+            "{{projectname}}.server.auth": "ERROR",
             "{{projectname}}.test": "DEBUG"
         }
     });
@@ -32,10 +34,14 @@ define([
             new Channel("{{projectname}}/server/conf", 1).send(conf);
             createDirs(conf);
             initDatabase(conf);
+            initAuth(conf);
 
             require([
                 // server
                 "{{projectname}}/test/startup/startServerTest",
+
+                // auth
+                "{{projectname}}/test/auth/authTest",
 
                 // models
                 "{{projectname}}/test/models/userTest",

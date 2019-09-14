@@ -8,6 +8,6 @@ define([
 ], function(module, Channel) {
     "use strict";
 
-    // get configration provided from index.js
+    // get configration provided from startup thread
     return Channel.lookup(module.id).peek();
 });
