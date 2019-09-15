@@ -28,7 +28,7 @@ define([
 
     logger.info(module.id);
 
-    var url = "http://127.0.0.1:" + conf.server.tcpPort + "/{{projectname}}/server/views/users";
+    var url = "http://127.0.0.1:" + conf.server.tcpPort + "/{{projectname}}/server/views/notes";
 
     // auth
     var headers = {
@@ -36,22 +36,22 @@ define([
     };
 
     // list
-    var resp1 = http.sendRequest(url + "?nick=", {
+    var resp1 = http.sendRequest(url + "?title=", {
         meta: {
             headers: headers
         }
     });
     assert.equal(resp1.responseCode, 200);
     assert(isObject(resp1.json()));
-    assert(isArray(resp1.json().users));
-    var countBefore = resp1.json().users.length;
+    assert(isArray(resp1.json().notes));
+    var countBefore = resp1.json().notes.length;
 
     // add
     var resp2 = http.sendRequest(url, {
         data: {
-            nick: "foo",
-            email: "baz@bar.com",
-            spam: false
+            title: "foo",
+            contents: "baz bar com",
+            important: false
         },
         meta: {
             headers: headers
@@ -65,9 +65,9 @@ define([
     // validation
     var resp3 = http.sendRequest(url, {
         data: {
-            nick: null,
-            email: "baz@bar.com",
-            spam: false
+            title: null,
+            contents: "baz bar com",
+            important: false
         }, meta: {
             abortOnResponseError: false,
             headers: headers
@@ -76,16 +76,16 @@ define([
     assert.equal(resp3.responseCode, 400);
     assert(isObject(resp3.json()));
     assert(isObject(resp3.json().errors));
-    assert(isString(resp3.json().errors.nick));
+    assert(isString(resp3.json().errors.title));
 
     // list
-    var resp4 = http.sendRequest(url + "?nick=", {
+    var resp4 = http.sendRequest(url + "?title=", {
         meta: {
             headers: headers
         }
     });
     assert.equal(resp4.responseCode, 200);
     assert(isObject(resp4.json()));
-    assert(isArray(resp4.json().users));
-    assert.equal(resp4.json().users.length, countBefore + 1);
+    assert(isArray(resp4.json().notes));
+    assert.equal(resp4.json().notes.length, countBefore + 1);
 });

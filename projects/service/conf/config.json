@@ -9,7 +9,8 @@
 
     "database": {
         "reCreateOnStartup": true,
-        "url": "sqlite://{{mustache_open_brackets}}appdir{{mustache_close_brackets}}work/{{projectname}}.db"
+        "url": "sqlite://{{mustache_open_brackets}}appdir{{mustache_close_brackets}}work/{{projectname}}.db",
+        "url_POSTGRES": "postgresql://host=127.0.0.1 port=5432 dbname={{projectname}} user={{projectname}} password={{projectname}}"
     },
 
     "auth": {
@@ -30,7 +31,7 @@
             "superuser": [
                 "/{{projectname}}/server/auth/[a-zA-Z]+",
                 "/{{projectname}}/server/views/ping",
-                "/{{projectname}}/server/views/u{1}sers"
+                "/{{projectname}}/server/views/n{1}otes"
             ]
         }
     },

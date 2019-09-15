@@ -44,11 +44,11 @@ define([
                 "{{projectname}}/test/auth/authTest",
 
                 // models
-                "{{projectname}}/test/models/userTest",
+                "{{projectname}}/test/models/noteTest",
 
                 // views
                 "{{projectname}}/test/views/pingTest",
-                "{{projectname}}/test/views/usersTest"
+                "{{projectname}}/test/views/notesTest"
             ], function(server) {
                 server.stop();
             });

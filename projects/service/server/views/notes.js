@@ -10,18 +10,17 @@ define([
     "wilton/Logger",
     "../conf",
     "../db",
-    "../models/user"
-], function(module, isBoolean, isEmpty, isString, Logger, conf, db, user) {
+    "../models/note"
+], function(module, isBoolean, isEmpty, isString, Logger, conf, db, note) {
     "use strict";
     var logger = new Logger(module.id);
 
     return {
         GET: function(req) {
-            logger.debug("Users list requested for input: [" + JSON.stringify(req.queries()) + "] ...");
+            logger.debug("Notes list requested for input: [" + JSON.stringify(req.queries()) + "] ...");
             var errors = {};
-            var form = req.queries();
-            if (!isString(form.nick)/* || isEmpty(form.nick)*/) {
-                errors.nick = "Requsted 'nick' is invalid";
+            if (!isString(req.queries().title)/* || isEmpty(req.queries().title)*/) {
+                errors.title = "Specified 'title' value is invalid";
             }
             if (!isEmpty(errors)) {
                 req.sendResponse({
@@ -34,27 +33,27 @@ define([
                 });
             } else {
                 var res = db.doInSyncTransaction(conf.database.url, function() {
-                    return user.find(req.queries().nick);
+                    return note.findByTitle(req.queries().title);
                 });
                 logger.debug("Users list loaded, count: [" + res.length + "]");
                 req.sendResponse({
-                    users: res
+                    notes: res
                 });
             }
         },
 
         POST: function(req) {
-            logger.debug("Adding user: [" + req.data() + "] ...");
+            logger.debug("Adding note: [" + req.data() + "] ...");
             var errors = {};
             var form = req.json();
-            if (!isString(form.nick) || isEmpty(form.nick)) {
-                errors.nick = "Specified 'nick' is empty";
+            if (!isString(form.title) || isEmpty(form.title)) {
+                errors.title = "Specified 'title' is empty";
             }
-            if (!isString(form.email) || isEmpty(form.email)) {
-                errors.email = "Specified 'email' is empty";
+            if (!isString(form.contents) || isEmpty(form.contents)) {
+                errors.contents = "Specified 'contents' is empty";
             }
-            if (!isBoolean(form.spam)) {
-                errors.spam = "Specified 'spam' is empty";
+            if (!isBoolean(form.important)) {
+                errors.important = "Specified 'important' is empty";
             }
             if (!isEmpty(errors)) {
                 req.sendResponse({
@@ -67,9 +66,9 @@ define([
                 });
             } else {
                 var id = db.doInSyncTransaction(conf.database.url, function() {
-                    return user.save(req.json());
+                    return note.save(req.json());
                 });
-                logger.debug("User added, id: [" + id + "]");
+                logger.debug("Note added, id: [" + id + "]");
                 req.sendResponse({
                     id: id
                 });

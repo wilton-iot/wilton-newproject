@@ -23,7 +23,7 @@ define([
 
                 // app
                 "{{projectname}}/server/views/ping",
-                "{{projectname}}/server/views/users"
+                "{{projectname}}/server/views/notes"
             ],
             filters: [
                 "{{projectname}}/server/auth/filter"

@@ -3,6 +3,7 @@
  */
 
 define([
+    // use PGConnection instead for Postgres
     "wilton/DBConnection",
     "./conf"
 ], function(DBConnection, conf) {

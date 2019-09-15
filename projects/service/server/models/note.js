@@ -3,9 +3,8 @@
  */
 
 define([
-    // modules
+    // deps
     "module",
-    "lodash/bind",
     "lodash/map",
     "moment",
     // wilton
@@ -16,7 +15,7 @@ define([
     "../conf",
     "../db"
 ], function(
-        module, bind, map, moment, // modules
+        module, map, moment, // deps
         DBConnection, loader, Logger, // wilton
         conf, db // local
 ) {
@@ -27,35 +26,33 @@ define([
     var qrs = DBConnection.loadQueryFile(queriesPath);
 
     return {
-        save: function(user) {
+        save: function(note) {
             db.execute(qrs.idUpdate);
-            user.id = db.queryObject(qrs.idSelect).id;
-            user.spam = user.spam ? 1 : 0;
-            user.dateAdded = moment().format();
-            db.execute(qrs.insert, user);
-            return user.id;
+            note.id = db.queryObject(qrs.idSelect).id;
+            // no real booleans in sqlite
+            note.important = note.important ? 1 : 0;
+            note.dateAdded = moment().format();
+            db.execute(qrs.insert, note);
+            return note.id;
         },
 
         loadById: function(id) {
-            var user = db.queryObject(qrs.selectById, {
+            var note = db.queryObject(qrs.selectById, {
                 id: id
             });
-            user.spam = 1 === user.spam;
-            return user;
+            note.important = 1 === note.important;
+            return note;
         },
 
-        find: function(params) {
-            var list = db.queryList(qrs.select, params);
-            return map(list, bind(function(rec) {
+        findByTitle: function(title) {
+            var list = db.queryList(qrs.selectByTitle, {
+                title: title
+            });
+            return map(list, function(rec) {
                 // no real booleans in sqlite
-                rec.spam = 1 === rec.spam;
+                rec.important = 1 === rec.spam;
                 return rec;
-            }, this));
-        },
-
-        count: function(params) {
-            var rec = db.queryObject(qrs.count, params);
-            return parseInt(rec.count, 10);
+            });
         },
 
         insertDummyRecords: function() {
@@ -63,14 +60,14 @@ define([
             logger.info("Inserting dummy records, count: [" + (count - 10) + "]");
             for (var i = 10; i < count; i++) {
                 db.execute(qrs.idUpdate);
-                var user = {
+                var note = {
                     id: db.queryObject(qrs.idSelect).id,
                     dateAdded: moment().add(i % 2 ? i : -i, "days").format(),
-                    nick: "a" + i + "SomeNick",
-                    email: "some" + (count - i) + "@email.com",
-                    spam: 0 === i % 3 ? 0 : 1
+                    title: "a" + i + "SomeTitle",
+                    contents: "some" + (count - i) + "contents",
+                    important: 0 === i % 3 ? 0 : 1
                 };
-                db.execute(qrs.insert, user);
+                db.execute(qrs.insert, note);
             }
         }
     };
