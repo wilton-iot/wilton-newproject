@@ -17,7 +17,7 @@ define([
 ], function(
         module,
         fs, Logger, misc, mustache, // wilton
-        initDatabase, startServer, sst // local
+        initAuth, initDatabase, startServer, sst // local
 ) {
     "use strict";
     var logger = new Logger(module.id);
