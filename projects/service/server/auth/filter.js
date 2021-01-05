@@ -2,28 +2,33 @@
 {{license}}
  */
 
+"use strict";
+
 define([
+    // libs
     "module",
-    "lodash/map",
     "lodash/mapValues",
     "pwdauth/authErrors",
     "pwdauth/authorize",
     "wilton/Logger",
+    // local
     "../conf",
     "./removeSession",
     "./sessionsStore"
-], function(module, map, mapValues, authErrors, authorize, Logger, conf, removeSession, sessionsStore) {
-    "use strict";
-    var logger = new Logger(module.id);
+], (
+        module, mapValues, authErrors, authorize, Logger, // libs
+        conf, removeSession, sessionsStore // local
+) => {
+    const logger = new Logger(module.id);
 
-    var roles = mapValues(conf.auth.roles, function(paths) {
-        return map(paths, function(pa) {
+    const roles = mapValues(conf.auth.roles, (paths) => {
+        return paths.map((pa) => {
             return new RegExp("^" + pa + "$");
         });
     });
     
     function loadUserFromSession(sessionKey) {
-        var user = sessionsStore.get(sessionKey);
+        const user = sessionsStore.get(sessionKey);
         if (null !== user) {
             user.sessionDurationMinutes = conf.auth.sessionDurationMinutes;
             user.rights = []; // not used, required by pwdauth
@@ -40,7 +45,7 @@ define([
         });
     }
 
-    return function(req, doFilter) {
+    return (req, doFilter) => {
         // check auth enabled
         if (!conf.auth.enabled) {
             doFilter(req);
@@ -48,12 +53,12 @@ define([
         }
 
         // requested path
-        var path = req.meta().pathname;
+        const path = req.meta().pathname;
 
         logger.debug("Checking request, path: [" + path + "] ...");
         // check path allowed without authentication
-        for (var i = 0; i < roles.public.length; i++) {
-            var regex = roles.public[i];
+        for (let i = 0; i < roles.public.length; i++) {
+            const regex = roles.public[i];
             if (regex.test(path)) {
                 logger.debug("Request allowed, role: [public]");
                 doFilter(req);
@@ -69,9 +74,9 @@ define([
         }
 
         // check session key
-        var sessionKey = req.headers().Authorization;
+        const sessionKey = req.headers().Authorization;
         logger.debug("Checking session, key: [" + sessionKey + "]");
-        var authResult = authorize(loadUserFromSession, {
+        const authResult = authorize(loadUserFromSession, {
             sessionKey: sessionKey
         });
 
@@ -103,9 +108,9 @@ define([
 
         // check path
         logger.debug("Checking access, role: [" + authResult.role + "]...");
-        var regexList = roles[authResult.role];
-        for (var i = 0; i < regexList.length; i++) {
-            var regex = regexList[i];
+        const regexList = roles[authResult.role];
+        for (let i = 0; i < regexList.length; i++) {
+            const regex = regexList[i];
             if (regex.test(path)) {
                 logger.debug("Request allowed, path template: [" + regex + "]");
                 // pass request

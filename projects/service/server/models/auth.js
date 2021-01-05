@@ -2,6 +2,8 @@
 {{license}}
  */
 
+"use strict";
+
 define([
     // modules
     "module",
@@ -13,32 +15,31 @@ define([
     // local
     "../conf",
     "../db"
-], function(
+], (
         module, createPasswordHash, // modules
         DBConnection, loader, Logger, // wilton
         conf, db // local
-) {
-    "use strict";
-    var logger = new Logger(module.id);
+) => {
+    const logger = new Logger(module.id);
 
-    var queriesPath = loader.findModulePath(module.id + ".sql");
-    var qrs = DBConnection.loadQueryFile(queriesPath);
+    const queriesPath = loader.findModulePath(module.id + ".sql");
+    const qrs = DBConnection.loadQueryFile(queriesPath);
 
     return {
-        save: function(user) {
+        save(user) {
             db.execute(qrs.idUpdate);
             user.id = db.queryObject(qrs.idSelect).id;
             db.execute(qrs.insert, user);
             return user.id;
         },
 
-        loadByLogin: function(login) {
+        loadByLogin(login) {
             return db.queryObject(qrs.selectByLogin, {
                 login: login
             });
         },
 
-        insertDummyRecords: function() {
+        insertDummyRecords() {
             this.save({
                 login: "admin",
                 role: "superuser",

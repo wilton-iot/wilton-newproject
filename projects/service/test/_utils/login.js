@@ -2,6 +2,8 @@
 {{license}}
  */
 
+"use strict";
+
 define([
     "assert",
     "moment",
@@ -9,12 +11,11 @@ define([
     "pwdauth/createPasswordHash",
     "wilton/httpClient",
     "{{projectname}}/server/conf"
-], function(assert, moment, createRequest, createPasswordHash, http, conf) {
-    "use strict";
+], (assert, moment, createRequest, createPasswordHash, http, conf) => {
 
-    return function(login, password) {
-        var url = "http://127.0.0.1:" + conf.server.tcpPort + "/{{projectname}}/server/auth/login";
-        var resp = http.sendRequest(url, {
+    return (login, password) => {
+        const url = "http://127.0.0.1:" + conf.server.tcpPort + "/{{projectname}}/server/auth/login";
+        const resp = http.sendRequest(url, {
             data: createRequest(
                     "{{projectname}}/server/auth/login",
                     login,

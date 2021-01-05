@@ -2,19 +2,20 @@
 {{license}}
  */
 
+"use strict";
+
 define([
     "module",
     "wilton/Logger",
     "../conf",
     "../db",
     "../models/auth"
-], function(module, Logger, conf, db, auth) {
-    "use strict";
-    var logger = new Logger(module.id);
+], (module, Logger, conf, db, auth) => {
+    const logger = new Logger(module.id);
 
-    return function(login) {
+    return (login) => {
         logger.debug("Loading auth user, login: [" + login + "] ...");
-        var res = db.doInSyncTransaction(conf.database.url, function() {
+        const res = db.doInSyncTransaction(conf.database.url, () => {
             return auth.loadByLogin(login);
         });
         if (null === res) {

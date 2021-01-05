@@ -2,13 +2,17 @@
 {{license}}
  */
 
-define([
-    "wilton/Channel",
-    "wilton/KVStore"
-], function(Channel, KVStore) {
-    "use strict";
+"use strict";
 
-    var channel = Channel.lookup("{{projectname}}/server/auth/sessionsStore");
-    var handle = channel.peek().kvstoreHandle;
+define([
+    "module",
+    "wilton/Channel",
+    "wilton/KVStore",
+    "wilton/Logger"
+], function(module, Channel, KVStore, Logger) {
+    const logger = new Logger(module.id);
+
+    const channel = Channel.lookup("{{projectname}}/server/auth/sessionsStore");
+    const handle = channel.peek().kvstoreHandle;
     return new KVStore(handle);
 });

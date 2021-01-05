@@ -2,11 +2,12 @@
 {{license}}
  */
 
+"use strict";
+
 define([
     "module",
     "wilton/Channel"
-], function(module, Channel) {
-    "use strict";
+], (module, Channel) => {
 
     // get configration provided from startup thread
     return Channel.lookup(module.id).peek();

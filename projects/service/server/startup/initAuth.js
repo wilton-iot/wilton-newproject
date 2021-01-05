@@ -2,16 +2,17 @@
 {{license}}
  */
 
+"use strict";
+
 define([
     "module",
     "wilton/Channel",
     "wilton/KVStore",
     "wilton/Logger"
-], function(module, Channel, KVStore, Logger) {
-    "use strict";
-    var logger = new Logger(module.id);
+], (module, Channel, KVStore, Logger) => {
+    const logger = new Logger(module.id);
 
-    return function(conf) {
+    return (conf) => {
         if (!conf.auth.enabled) {
             logger.warn("Attention! Authentication is disabled.");
             return;
@@ -20,13 +21,13 @@ define([
         new Channel("{{projectname}}/server/auth/lock", 1);
 
         // sessions
-        var sessionsStore = new KVStore(conf.auth.sessionsStorePath);
+        const sessionsStore = new KVStore(conf.auth.sessionsStorePath);
         new Channel("{{projectname}}/server/auth/sessionsStore", 1).send({
             kvstoreHandle: sessionsStore.handle
         });
         
         //users
-        var usersStore = new KVStore(conf.auth.usersStorePath);
+        const usersStore = new KVStore(conf.auth.usersStorePath);
         new Channel("{{projectname}}/server/auth/usersStore", 1).send({
             kvstoreHandle: usersStore.handle
         });

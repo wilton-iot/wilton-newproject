@@ -2,16 +2,17 @@
 {{license}}
  */
 
+"use strict";
+
 define([
     "module",
     "wilton/Logger",
     "../conf"
-], function(module, Logger, conf) {
-    "use strict";
-    var logger = new Logger(module.id);
+], (module, Logger, conf) => {
+    const logger = new Logger(module.id);
 
     return {
-        GET: function(req) {
+        GET(req) {
             req.sendResponse({
                 appname: conf.appname,
                 message: "pong"

@@ -2,16 +2,16 @@
 {{license}}
  */
 
+"use strict";
+
 define([
     "module",
     "wilton/Logger"
-], function(module, Logger) {
-    "use strict";
-    var logger = new Logger(module.id);
+], (module, Logger) => {
+    const logger = new Logger(module.id);
 
     // actual application logic
-    return function(args) {
-
+    return (args) => {
         if (args.printMe.length > 0) {
             logger.info(args.printMe);
         } else {

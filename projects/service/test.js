@@ -2,17 +2,23 @@
 {{license}}
  */
 
+"use strict";
+
 define([
+    // libs
     "module",
     "wilton/Channel",
     "wilton/Logger",
     "wilton/loader",
+    // local
+    "{{projectname}}/server/startup/createDb",
     "{{projectname}}/server/startup/createDirs",
-    "{{projectname}}/server/startup/initAuth",
-    "{{projectname}}/server/startup/initDatabase"
-], function(module, Channel, Logger, loader, createDirs, initAuth, initDatabase) {
-    "use strict";
-    var logger = new Logger(module.id);
+    "{{projectname}}/server/startup/initAuth"
+], (
+        module, Channel, Logger, loader, // libs
+        createDb, createDirs, initAuth // local
+) => {
+    const logger = new Logger(module.id);
 
     Logger.initialize({
         appenders: [{
@@ -28,33 +34,33 @@ define([
         }
     });
 
-    return {
-        main: function() {
-            var conf = loader.loadAppConfig(module);
-            new Channel("{{projectname}}/server/conf", 1).send(conf);
-            createDirs(conf);
-            initDatabase(conf);
-            initAuth(conf);
+    return () => {
+        const conf = loader.loadAppConfig(module);
+        new Channel("{{projectname}}/server/conf", 1).send(conf);
+        createDirs(conf);
+        // prepare lock for sqlite access
+        new Channel(conf.database.url, 1);
+        createDb(conf);
+        initAuth(conf);
 
-            require([
-                // server
-                "{{projectname}}/test/startup/startServerTest",
+        require([
+            // server
+            "{{projectname}}/test/startup/startServerTest",
 
-                // auth
-                "{{projectname}}/test/auth/authTest",
+            // auth
+            "{{projectname}}/test/auth/authTest",
 
-                // models
-                "{{projectname}}/test/models/noteTest",
+            // models
+            "{{projectname}}/test/models/noteTest",
 
-                // views
-                "{{projectname}}/test/views/pingTest",
-                "{{projectname}}/test/views/notesTest"
-            ], function(server) {
-                server.stop();
-            });
-            
-            logger.info("TESTS PASSED");
-        }
+            // views
+            "{{projectname}}/test/views/pingTest",
+            "{{projectname}}/test/views/notesTest"
+        ], (server) => {
+            server.stop();
+        });
+        
+        logger.info("TESTS PASSED");
     };
 
 });

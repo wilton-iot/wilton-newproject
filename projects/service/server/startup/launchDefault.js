@@ -2,6 +2,8 @@
 {{license}}
  */
 
+"use strict";
+
 define([
     "module",
     // wilton
@@ -10,28 +12,23 @@ define([
     "wilton/process",
     // local
     "./initAuth",
-    "./initDatabase",
     "./startServer"
-], function(
+], (
         module,
         Logger, misc, process, // wilton
-        initAuth, initDatabase, startServer // local
-) {
-    "use strict";
-    var logger = new Logger(module.id);
+        initAuth, startServer // local
+) => {
+    const logger = new Logger(module.id);
 
-    return function(conf) {
+    return (conf) => {
         // init logging
         Logger.initialize(conf.logging);
-
-        // db
-        initDatabase(conf).close();
 
         // auth
         initAuth(conf);
 
         // server
-        var server = startServer(conf);
+        const server = startServer(conf);
 
         // wait for signal from systemd
         logger.info("Awaiting shutdown signal (Ctrl+C), pid: [" + process.currentPid() + "] ...");

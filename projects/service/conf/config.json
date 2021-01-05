@@ -8,7 +8,6 @@
     },
 
     "database": {
-        "reCreateOnStartup": true,
         "url": "sqlite://{{mustache_open_brackets}}appdir{{mustache_close_brackets}}work/{{projectname}}.db",
         "url_POSTGRES": "postgresql://host=127.0.0.1 port=5432 dbname={{projectname}} user={{projectname}} password={{projectname}}"
     },

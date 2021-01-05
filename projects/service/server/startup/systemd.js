@@ -2,6 +2,8 @@
 {{license}}
  */
 
+"use strict";
+
 define([
     "module",
     // wilton
@@ -11,26 +13,24 @@ define([
     "wilton/mustache",
     // local
     "./initAuth",
-    "./initDatabase",
     "./startServer",
     "text!./systemd.service"
-], function(
+], (
         module,
         fs, Logger, misc, mustache, // wilton
-        initAuth, initDatabase, startServer, sst // local
-) {
-    "use strict";
-    var logger = new Logger(module.id);
+        initAuth, startServer, sst // local
+) => {
+    const logger = new Logger(module.id);
 
     return {
-        createServiceFile: function(conf) {
-            var path = conf.appdir + "work/{{projectname}}.service";
-            var username = misc.wiltonConfig().environmentVariables.USER;
+        createServiceFile(conf) {
+            const path = conf.appdir + "work/{{projectname}}.service";
+            const username = misc.wiltonConfig().environmentVariables.USER;
             if (!("string" === typeof(username) && username.length > 0)) {
                 print("ERROR: cannot find out user name from '$USER' environment variable");
                 return 1;
             }
-            var text = mustache.render(sst, {
+            const text = mustache.render(sst, {
                 appdir: conf.appdir,
                 username: username
             });
@@ -42,18 +42,15 @@ define([
             print("> sudo systemctl status {{projectname}}");
         },
 
-        launch: function(conf) {
+        launch(conf) {
             // init logging
             Logger.initialize(conf.logging);
-
-            // db
-            initDatabase(conf).close();
 
             // auth
             initAuth(conf);
 
             // server
-            var server = startServer(conf);
+            const server = startServer(conf);
 
             // notify systemd
             misc.systemdNotify("READY=1");

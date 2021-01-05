@@ -2,6 +2,8 @@
 {{license}}
  */
 
+"use strict";
+
 define([
     //deps
     "module",
@@ -17,26 +19,25 @@ define([
     // local
     "{{projectname}}/server/conf",
     "../_utils/login"
-], function(
+], (
         module, assert, // deps
         isArray, isInteger, isObject, isString, // lodash
         http, Logger, // wilton
         conf, login // local
-) {
-    "use strict";
-    var logger = new Logger(module.id);
+) => {
+    const logger = new Logger(module.id);
 
     logger.info(module.id);
 
-    var url = "http://127.0.0.1:" + conf.server.tcpPort + "/{{projectname}}/server/views/notes";
+    const url = "http://127.0.0.1:" + conf.server.tcpPort + "/{{projectname}}/server/views/notes";
 
     // auth
-    var headers = {
+    const headers = {
         Authorization: login("admin", "password")
     };
 
     // list
-    var resp1 = http.sendRequest(url + "?title=", {
+    const resp1 = http.sendRequest(url + "?title=", {
         meta: {
             headers: headers
         }
@@ -44,10 +45,10 @@ define([
     assert.equal(resp1.responseCode, 200);
     assert(isObject(resp1.json()));
     assert(isArray(resp1.json().notes));
-    var countBefore = resp1.json().notes.length;
+    const countBefore = resp1.json().notes.length;
 
     // add
-    var resp2 = http.sendRequest(url, {
+    const resp2 = http.sendRequest(url, {
         data: {
             title: "foo",
             contents: "baz bar com",
@@ -63,7 +64,7 @@ define([
     assert(resp2.json().id > 0);
 
     // validation
-    var resp3 = http.sendRequest(url, {
+    const resp3 = http.sendRequest(url, {
         data: {
             title: null,
             contents: "baz bar com",
@@ -79,7 +80,7 @@ define([
     assert(isString(resp3.json().errors.title));
 
     // list
-    var resp4 = http.sendRequest(url + "?title=", {
+    const resp4 = http.sendRequest(url + "?title=", {
         meta: {
             headers: headers
         }

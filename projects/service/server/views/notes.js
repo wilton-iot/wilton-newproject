@@ -2,6 +2,8 @@
 {{license}}
  */
 
+"use strict";
+
 define([
     "module",
     "lodash/isBoolean",
@@ -11,14 +13,13 @@ define([
     "../conf",
     "../db",
     "../models/note"
-], function(module, isBoolean, isEmpty, isString, Logger, conf, db, note) {
-    "use strict";
-    var logger = new Logger(module.id);
+], (module, isBoolean, isEmpty, isString, Logger, conf, db, note) => {
+    const logger = new Logger(module.id);
 
     return {
-        GET: function(req) {
+        GET(req) {
             logger.debug("Notes list requested for input: [" + JSON.stringify(req.queries()) + "] ...");
-            var errors = {};
+            const errors = {};
             if (!isString(req.queries().title)/* || isEmpty(req.queries().title)*/) {
                 errors.title = "Specified 'title' value is invalid";
             }
@@ -32,7 +33,7 @@ define([
                     }
                 });
             } else {
-                var res = db.doInSyncTransaction(conf.database.url, function() {
+                const res = db.doInSyncTransaction(conf.database.url, () => {
                     return note.findByTitle(req.queries().title);
                 });
                 logger.debug("Users list loaded, count: [" + res.length + "]");
@@ -42,10 +43,10 @@ define([
             }
         },
 
-        POST: function(req) {
+        POST(req) {
             logger.debug("Adding note: [" + req.data() + "] ...");
-            var errors = {};
-            var form = req.json();
+            const errors = {};
+            const form = req.json();
             if (!isString(form.title) || isEmpty(form.title)) {
                 errors.title = "Specified 'title' is empty";
             }
@@ -65,7 +66,7 @@ define([
                     }
                 });
             } else {
-                var id = db.doInSyncTransaction(conf.database.url, function() {
+                const id = db.doInSyncTransaction(conf.database.url, () => {
                     return note.save(req.json());
                 });
                 logger.debug("Note added, id: [" + id + "]");

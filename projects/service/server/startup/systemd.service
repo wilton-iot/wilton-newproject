@@ -1,5 +1,6 @@
 [Unit]
 Description = {{projectname}} service
+#After=postgresql.service
 
 [Service]
 Type = notify

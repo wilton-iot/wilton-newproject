@@ -2,6 +2,8 @@
 {{license}}
  */
 
+"use strict";
+
 define([
     //deps
     "module",
@@ -12,20 +14,19 @@ define([
     // local
     "{{projectname}}/server/conf",
     "{{projectname}}/server/startup/startServer"
-], function(
+], (
         module, assert, // deps
         http, Logger, // wilton
         conf, startServer // local
-) {
-    "use strict";
-    var logger = new Logger(module.id);
+) => {
+    const logger = new Logger(module.id);
 
     logger.info(module.id);
     // start
-    var server = startServer(conf);
+    const server = startServer(conf);
     assert(server);
     // ping
-    var resp = http.sendRequest("http://127.0.0.1:" + conf.server.tcpPort + "/{{projectname}}/server/views/ping");
+    const resp = http.sendRequest("http://127.0.0.1:" + conf.server.tcpPort + "/{{projectname}}/server/views/ping");
     assert.equal(resp.responseCode, 200);
     return server;
 });

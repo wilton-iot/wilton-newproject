@@ -2,6 +2,8 @@
 {{license}}
  */
 
+"use strict";
+
 define([
     "module",
     "lodash/filter",
@@ -9,18 +11,17 @@ define([
     "wilton/Logger",
     "./sessionsStore",
     "./usersStore"
-], function(module, filter, Channel, Logger, sessionsStore, usersStore) {
-    "use strict";
-    var logger = new Logger(module.id);
+], (module, filter, Channel, Logger, sessionsStore, usersStore) => {
+    const logger = new Logger(module.id);
 
-    var lock = Channel.lookup("{{projectname}}/server/auth/lock");
+    const lock = Channel.lookup("{{projectname}}/server/auth/lock");
 
-    return function(sessionKey) {
-        return lock.synchronize(function() {
+    return (sessionKey) => {
+        return lock.synchronize(() => {
 
             // find out and remove session
             logger.debug("Removing session record, key: [" + sessionKey + "] ...");
-            var user = sessionsStore.get(sessionKey);
+            const user = sessionsStore.get(sessionKey);
             if (null === user) {
                 logger.warn("Invalid deauthorize attempt, session not found, key: [" + sessionKey + "]");
                 return false;
@@ -28,7 +29,7 @@ define([
             sessionsStore.remove(sessionKey);
 
             // find out all active sessions for this user
-            var keys = usersStore.get(user.id);
+            const keys = usersStore.get(user.id);
             if (null === keys) {
                 logger.warn("Inconsistent session data, user record not found," +
                         " key: [" + sessionKey + "]," +
@@ -37,7 +38,7 @@ define([
             }
 
             // filter out removed session
-            var filtered = filter(keys, function(key) {
+            const filtered = filter(keys, (key) => {
                 return key !== sessionKey;
             });
             if (filtered.length === keys.length) {

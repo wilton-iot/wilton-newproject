@@ -2,6 +2,8 @@
 {{license}}
  */
 
+"use strict";
+
 define([
     // deps
     "module",
@@ -15,17 +17,16 @@ define([
     // local
     "{{projectname}}/server/conf",
     "{{projectname}}/server/models/note"
-], function(
+], (
         module, assert, isArray, isNumber, isObject, moment, // deps
         Logger, // wilton
         conf, note // local
-) {
-    "use strict";
-    var logger = new Logger(module.id);
+) => {
+    const logger = new Logger(module.id);
     logger.info(module.id);
 
     // save
-    var id = note.save({
+    const id = note.save({
         title: "foo",
         contents: "bar baz com",
         important: false
@@ -34,7 +35,7 @@ define([
     assert(id > 0);
 
     // load
-    var loaded = note.loadById(id);
+    const loaded = note.loadById(id);
     assert(isObject(loaded));
     assert.equal(loaded.id, id);
     assert.equal(loaded.title, "foo");
@@ -43,7 +44,7 @@ define([
     assert(moment(loaded.dateAdded).isValid());
 
     // find
-    var foundBefore = note.findByTitle("bar").length;
+    const foundBefore = note.findByTitle("bar").length;
     note.save({
         title: "bar1",
         contents: "bar1 baz com",
@@ -54,11 +55,11 @@ define([
         contents: "bar2 baz com",
         important: true
     });
-    var found = note.findByTitle("bar");
+    const found = note.findByTitle("bar");
     assert(isArray(found));
     assert.equal(found.length, foundBefore + 2);
 
-    var empty = note.findByTitle("fail");
+    const empty = note.findByTitle("fail");
     assert(isArray(empty));
     assert.equal(empty.length, 0);
 });

@@ -2,6 +2,8 @@
 {{license}}
  */
 
+"use strict";
+
 define([
     // deps
     "module",
@@ -16,14 +18,13 @@ define([
     // local
     "./loadUser",
     "./createSession"
-], function(
+], (
         module, includes, isNil, // deps
         authenticate, authErrors, createRequest, // pwdauth
         Logger, // wilton
         loadUser, createSession // local
-) {
-    "use strict";
-    var logger = new Logger(module.id);
+) => {
+    const logger = new Logger(module.id);
 
     function send400(req) {
         req.sendResponse("", {
@@ -35,7 +36,7 @@ define([
     }
 
     return {
-        POST: function(req) {
+        POST: (req) => {
             // check auth request
             try {
                 // check auth request format
@@ -53,7 +54,7 @@ define([
             }
 
             // authenticate
-            var token = authenticate(loadUser, createRequest, createSession, req.json());
+            const token = authenticate(loadUser, createRequest, createSession, req.json());
 
             // check errors
             if (!isNil(token.error)) {

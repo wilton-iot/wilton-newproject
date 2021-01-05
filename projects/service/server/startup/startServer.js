@@ -2,18 +2,19 @@
 {{license}}
  */
 
+"use strict";
+
 define([
     "module",
     "wilton/Channel",
     "wilton/Logger",
     "wilton/Server"
-], function(module, Channel, Logger, Server) {
-    "use strict";
-    var logger = new Logger(module.id);
+], (module, Channel, Logger, Server) => {
+    const logger = new Logger(module.id);
 
-    return function(conf) {
+    return (conf) => {
         logger.info("Starting server on port: [" + conf.server.tcpPort + "]");
-        var server = new Server({
+        const server = new Server({
             ipAddress: conf.server.ipAddress,
             tcpPort: conf.server.tcpPort,
             views: [
